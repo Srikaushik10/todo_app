@@ -1,5 +1,5 @@
 from datetime import date # Importing the 'date' class from Python's built-in 'datetime' module
-
+from typing import List
 
 """
 The Todo class represents a single task entry.
@@ -39,3 +39,10 @@ class Todo:
         self.description = description
         self.startDate = startDate
         self.endDate = endDate
+    
+
+
+todos: List[Todo] = [
+    Todo(1, "Learning Basics FastAPI", "Building Todo application using FastAPI", date(2025, 10, 18),date(2025,10,25)),
+    Todo(2,"Leaning Git","Understanding and implementing Git commands in my project", date(2025,10,19),date(2025,10,25))
+]

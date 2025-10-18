@@ -1,0 +1,150 @@
+#Setup & Configuration
+# Check git version
+git --version
+
+# Set your username and email (only needed once)
+git config --global user.name "Your Name"
+git config --global user.email "youremail@example.com"
+
+# Check configuration
+git config --list
+
+
+
+#Initialize a Repository
+# Initialize a new local repository
+git init
+
+# Connect local repo to GitHub (remote repository)
+git remote add origin https://github.com/yourusername/repo-name.git
+
+# Verify connection
+git remote -v
+
+#Basic Workflow
+
+# Check current status (which files changed)
+git status
+
+# Stage all changes for commit
+git add .
+
+# Or stage a specific file
+git add filename.py
+
+# Commit your changes with a message
+git commit -m "Your commit message"
+
+# View commit history
+git log
+
+
+#Push & Pull
+# Create a new branch
+git branch feature/new-feature
+
+# Switch to another branch
+git checkout feature/new-feature
+
+# Create and switch in one step
+git checkout -b feature/new-feature
+
+# List all branches
+git branch
+
+# Delete a local branch
+git branch -d feature/new-feature
+
+# Delete a remote branch
+git push origin --delete feature/new-feature
+
+
+
+Merging & Rebasing
+# Merge a branch into main
+git checkout main
+git merge feature/new-feature
+
+# Rebase (apply commits from one branch onto another)
+git checkout feature/new-feature
+git rebase main
+
+
+
+# Undoing & Fixing Mistakes
+# Unstage files (undo 'git add')
+git reset HEAD filename.py
+
+# Undo last commit but keep changes
+git reset --soft HEAD~1
+
+# Undo last commit completely (discard changes)
+git reset --hard HEAD~1
+
+# Revert a specific commit (creates a new commit that undoes it)
+git revert <commit-id>
+
+# View commit history compactly
+git log --oneline
+
+
+
+# Viewing Info
+# Check which branch you’re on
+git branch
+
+# See differences between commits or working directory
+git diff
+
+# See remote repositories
+git remote -v
+
+# View who changed what (blame mode)
+git blame filename.py
+
+
+
+# Stashing (Save Work Temporarily)
+# Save uncommitted work
+git stash
+
+# Show list of stashes
+git stash list
+
+# Apply most recent stash
+git stash apply
+
+# Apply and remove stash
+git stash pop
+
+
+
+
+#Tagging Releases
+# Create a new tag
+git tag v1.0
+
+# Annotated tag with message
+git tag -a v1.0 -m "First release"
+
+# Push tags to remote
+git push origin --tags
+
+
+
+
+#Cloning & Forking
+# Clone a repository
+git clone https://github.com/username/repo-name.git
+
+# Clone with a specific branch
+git clone -b branch-name https://github.com/username/repo-name.git
+
+
+#Cleaning Up
+
+# Remove untracked files
+git clean -f
+
+# Remove untracked directories
+git clean -fd
