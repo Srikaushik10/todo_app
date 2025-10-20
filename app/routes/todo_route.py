@@ -1,85 +1,85 @@
-# Import the service layer module that contains business logic functions
 from app.services import todo_service
-
-# Import the Todo class model (used to describe a todo item)
 from app.modules.todo_module import Todo, todos
-
-# Import FastAPI classes:
-# APIRouter → lets you define route groups that can be attached to your main app
-# HTTPException → used to raise custom error responses
 from fastapi import APIRouter, HTTPException
-
-# Import type hints for readability and validation
 from typing import List, Optional
 
-# Create an APIRouter instance.
-# This allows you to register all “/todos” endpoints here
-# and later include them into the main FastAPI app.
 router = APIRouter()
 
-
-# --------------------------------------------------------
-# GET /todos/
-# Endpoint to retrieve all todo items
-# --------------------------------------------------------
+# ------------------------------------------------------------
+# GET /todos  → get all todos
+# ------------------------------------------------------------
 @router.get("/", response_model=None)
-def get_all_todos() -> List[Todo]:
+def get_all_todos() -> List[dict]:
     """
-    Fetch all todo items from the service layer.
-
-    Returns:
-        A list of todo dictionaries that FastAPI can serialize to JSON.
+    Return all todo items as a list of dictionaries.
     """
-    # todo_service.get_all_todos() returns a list of Todo objects.
-    # vars(todo) converts each Todo object into a dictionary
-    # so it can be safely returned as JSON.
     return [vars(todo) for todo in todo_service.get_all_todos()]
 
 
-# --------------------------------------------------------
-# GET /todos/{id}
-# Endpoint to retrieve a single todo item by its ID
-# --------------------------------------------------------
+# ------------------------------------------------------------
+# GET /todos/{id}  → get single todo by ID
+# ------------------------------------------------------------
 @router.get("/{id}", response_model=None)
-def get_todo_by_id(id: int) -> Optional[Todo]:
+def get_todo_by_id(id: int) -> Optional[dict]:
     """
-    Fetch a single todo by its unique ID.
-
-    Args:
-        id (int): The ID of the todo item.
-
-    Returns:
-        The todo item as a dictionary if found, or None if not found.
+    Fetch a single todo by its ID.
     """
-    # Call the service function to get the todo with the given ID
     todo = todo_service.get_todo_by_id(id)
-
-    # If a todo is found, return it as a dictionary
-    if todo:
-        return vars(todo)
-
-    # If no todo matches the ID, return None.
-    # (You could alternatively raise an HTTPException here for clarity.)
-    return None
+    if not todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return vars(todo)
 
 
-# --------------------------------------------------------------
-# POST /todos
-# Endpoint to post a todo item
-# --------------------------------------------------------------
-
+# ------------------------------------------------------------
+# POST /todos  → create new todo
+# ------------------------------------------------------------
 @router.post("/", response_model=None)
 def create_todo(todo: dict):
     """
-    Create a new todo item and add it to the in-memory list.
+    Create a new todo using plain dictionary input.
     """
-    create_obj = Todo(**todo)
-    # Pass the incoming todo object to the service layer
+    # Convert dict → Todo object manually (no Pydantic used)
+    create_obj = Todo(
+        id=todo.get("id"),
+        title=todo.get("title"),
+        description=todo.get("description"),
+        startDate=todo.get("startDate"),
+        endDate=todo.get("endDate"),
+    )
     created_todo = todo_service.create_todo(create_obj)
     return vars(created_todo)
 
 
-@router.delete("/{id}",response_model=None)
-def delete_todo_by_id(id:int):
-    deleted_by_id = todo_service.delete_todo_by_id(id)
-    return vars(deleted_by_id)
+# ------------------------------------------------------------
+# PUT /todos/{id}  → update existing todo
+# ------------------------------------------------------------
+@router.put("/{id}", response_model=None)
+def update_todo(id: int, todo: dict):
+    """
+    Update a todo by its ID with plain dictionary input.
+    """
+    update_obj = Todo(
+        id=id,
+        title=todo.get("title"),
+        description=todo.get("description"),
+        startDate=todo.get("startDate"),
+        endDate=todo.get("endDate"),
+    )
+    updated_todo = todo_service.update_todo(id, update_obj)
+    if not updated_todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return vars(updated_todo)
+
+
+# ------------------------------------------------------------
+# DELETE /todos/{id}  → delete todo by ID
+# ------------------------------------------------------------
+@router.delete("/{id}", response_model=None)
+def delete_todo_by_id(id: int):
+    """
+    Delete a todo by its ID.
+    """
+    deleted_todo = todo_service.delete_todo_by_id(id)
+    if not deleted_todo:
+        raise HTTPException(status_code=404, detail="Todo not found")
+    return {"message": f"Todo with ID {id} deleted successfully."}
