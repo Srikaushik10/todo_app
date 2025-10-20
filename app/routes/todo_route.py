@@ -77,3 +77,9 @@ def create_todo(todo: dict):
     # Pass the incoming todo object to the service layer
     created_todo = todo_service.create_todo(create_obj)
     return vars(created_todo)
+
+
+@router.delete("/{id}",response_model=None)
+def delete_todo_by_id(id:int):
+    deleted_by_id = todo_service.delete_todo_by_id(id)
+    return vars(deleted_by_id)

@@ -77,3 +77,15 @@ def create_todo(todo: Todo) -> Optional[Todo]:
     """
     todos.append(todo)
     return todo
+
+
+# ---------------------------------------------------------
+# FUNCTION: delete_todo_by_id
+# ---------------------------------------------------------
+def delete_todo_by_id(id:int) -> Optional[Todo]:
+    for index, todo in enumerate(todos):
+        if todo.id == id:
+                deleted_todo = todos.pop(index)
+                return deleted_todo
+    return None       
+   
