@@ -1,3 +1,7 @@
+#source /Users/kaushikpamidimuklala/Desktop/to-do-app/to-do-app/bin/activate   
+
+
+
 #Setup & Configuration
 # Check git version
 git --version

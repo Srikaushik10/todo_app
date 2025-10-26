@@ -28,16 +28,16 @@ def get_todo_by_id(id: int) -> Optional[Todo]:
 # ---------------------------------------------------------
 # FUNCTION: create_todo
 # ---------------------------------------------------------
-def create_todo(todo: Todo) -> Todo:
+def add_todo(todo: Todo) -> Todo:
     """
     Add a new todo to the list.
     Automatically generates an incremental ID.
     """
-    # Auto-generate ID
-    if todos:
-        todo.id = todos[-1].id + 1
-    else:
-        todo.id = 1
+    #  Auto-generate ID
+    # if todos:
+    #     todo.id = todos[-1].id + 1
+    # else:
+    #     todo.id = 1
 
     todos.append(todo)
     return todo
@@ -55,9 +55,8 @@ def update_todo(id: int, todo: Todo) -> Optional[Todo]:
         if existing_todo.id == id:
             todo.id = id  # keep same ID
             todos[i] = todo
-            return todos[i]
+            return todo
     return None
-
 
 # ---------------------------------------------------------
 # FUNCTION: delete_todo_by_id
@@ -66,8 +65,8 @@ def delete_todo_by_id(id: int) -> Optional[Todo]:
     """
     Delete a todo by its ID and return the deleted object.
     """
-    for index, todo in enumerate(todos):
-        if todo.id == id:
-            deleted_todo = todos.pop(index)
+    for i, existing_todo in enumerate(todos):
+        if existing_todo.id == id:
+            deleted_todo = todos.pop(i)
             return deleted_todo
     return None
